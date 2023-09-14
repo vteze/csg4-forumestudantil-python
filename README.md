@@ -12,6 +12,6 @@ Serviço de Fórum Estudantil: Oferece um espaço vital para a interação entre
 
 TO RUN PROJECT:
 
-python manage.py makemigrations
+python manage.py makemigrations myapp
 python manage.py migrate
 python manage.py runserver

@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import PostsDestaqueView
+from . import views
 
 urlpatterns = [
-    path('postsDestaque/', PostsDestaqueView.as_view(), name='postsDestaque'),
+    path('postsDestaque/', views.posts_destaque, name='postsDestaque'),
 ]
