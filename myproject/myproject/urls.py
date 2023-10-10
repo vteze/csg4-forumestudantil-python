@@ -6,4 +6,5 @@ urlpatterns = [
     path('', include('myapp.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('myapp.urls')),
+    path('swagger/', include('myapp.urls')),
 ]
