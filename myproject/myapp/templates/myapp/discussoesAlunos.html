@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Forum Estudantil</title>
     <style>
@@ -9,6 +10,7 @@
             align-items: center;
             text-align: center;
         }
+
         #chat {
             max-width: 400px;
             border: 2px solid #ccc;
@@ -32,18 +34,19 @@
             cursor: pointer;
         }
 
-        #chat input[type="text"], #send-button {
+        #chat input[type="text"],
+        #send-button {
             display: inline-block;
             vertical-align: middle;
         }
-        
     </style>
 </head>
+
 <body>
     <h1>Forum</h1>
     <ul>
         {% for thread in threads %}
-            <li><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></li>
+        <li><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></li>
         {% endfor %}
     </ul>
     <div id="chat">
@@ -52,4 +55,5 @@
         <button id="send-button">Send</button>
     </div>
 </body>
+
 </html>
