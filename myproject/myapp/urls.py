@@ -21,6 +21,8 @@ urlpatterns = [
     path("", views.mainPage, name="mainPage"),
     path("postsDestaque/", views.postsDestaque, name="postsDestaque"),
     path("discussoesAlunos/", views.discussoesAlunos, name="discussoesAlunos"),
+    path("add_discussion/", views.add_discussion, name="add_discussion"),
+    path("get_discussions/", views.get_discussions, name="get_discussions"),
     path(
         "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
     ),

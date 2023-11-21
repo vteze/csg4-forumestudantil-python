@@ -1,4 +1,7 @@
 from django.db import models
+from db_connection import db
+
+discussions_collection = db["discussion"]
 
 
 class Meta:
