@@ -21,22 +21,6 @@ resource "aws_instance" "aws-labo" {
   name             = "aws-labo"
 } */
 
-resource "aws_codedeploy_deployment_group" "csg4_forumestudantil_deployment_group" {
-  app_name              = aws_codedeploy_app.csg4_forumestudantil_application.name
-  deployment_group_name = "csg4-forumestudantil-deployment-group"
-  service_role_arn      = "arn:aws:iam::813303321040:role/LabRole"
-
-  autoscaling_groups = [
-		aws_autoscaling_group.vtz.name
-	]
-
-  auto_rollback_configuration {
-    enabled = true
-    events  = ["DEPLOYMENT_FAILURE"]
-  }
-
-}
-
 resource "aws_security_group" "aws-labo" {
     description = "Security group used on the deploy for the Forum project in the 2023/2 class on software construction"
     vpc_id      = module.vpc.vpc_id
