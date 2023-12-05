@@ -14,7 +14,6 @@ provider "aws" {
 resource "aws_instance" "aws-labo" {
   ami           = "ami-01bc990364452ab3e" # Ubuntu 22.04 LTS
   instance_type = "t2.micro"
-  subnet_id     = subnet-0fe5c2b005939f49b
 }
 
 /* resource "aws_codedeploy_app" "aws-labo" {
