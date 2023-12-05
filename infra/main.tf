@@ -1,24 +1,44 @@
-provider "aws" {
-  region = "us-east-1"
-  default_tags {
-    tags = {
-      Project        = "ForumCD"
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
     }
   }
+
 }
 
-resource "aws_instance" "forum" {
-  ami           = "ami-007855ac798b5175e" # Ubuntu 22.04 LTS
+provider "aws" {
+  region  = "us-east-1"
+}
+
+resource "aws_instance" "aws-labo" {
+  ami           = "ami-01bc990364452ab3e" # Ubuntu 22.04 LTS
   instance_type = "t2.micro"
-  subnet_id     = element(module.vpc.public_subnets, 0)
+  subnet_id     = subnet-0fe5c2b005939f49b
 }
 
-/* resource "aws_codedeploy_app" "forum" {
+/* resource "aws_codedeploy_app" "aws-labo" {
   compute_platform = "Server"
-  name             = "forum"
+  name             = "aws-labo"
 } */
 
-resource "aws_security_group" "forum" {
+resource "aws_codedeploy_deployment_group" "csg4_forumestudantil_deployment_group" {
+  app_name              = aws_codedeploy_app.csg4_forumestudantil_application.name
+  deployment_group_name = "csg4-forumestudantil-deployment-group"
+  service_role_arn      = "arn:aws:iam::813303321040:role/LabRole"
+
+  autoscaling_groups = [
+		aws_autoscaling_group.vtz.name
+	]
+
+  auto_rollback_configuration {
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
+  }
+
+}
+
+resource "aws_security_group" "aws-labo" {
     description = "Security group used on the deploy for the Forum project in the 2023/2 class on software construction"
     vpc_id      = module.vpc.vpc_id
     egress      = [
@@ -90,17 +110,17 @@ resource "aws_security_group" "forum" {
             to_port          = -1
         },
     ]
-    name        = "forum"
+    name        = "aws-labo"
 }
 
-/* resource "aws_db_instance" "forum" {
+/* resource "aws_db_instance" "aws-labo" {
   allocated_storage = 5
   engine = "postgres"
   instance_class = "db.t3.micro"
-  username = "forum"
+  username = "aws-labo"
   password = "foobarbaz"
   db_subnet_group_name = module.vpc.database_subnet_group_name
-  vpc_security_group_ids = [aws_security_group.forum.id]
+  vpc_security_group_ids = [aws_security_group.aws-labo.id]
 
   skip_final_snapshot = true // required to destroy
 } */
@@ -108,25 +128,25 @@ resource "aws_security_group" "forum" {
 module "alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "forumCD"
+  name    = "csg4-forumestudantil"
   vpc_id  = module.vpc.vpc_id
   subnets = module.vpc.public_subnets
 
   create_security_group = false
-  security_groups = [aws_security_group.forum.id]
+  security_groups = [aws_security_group.aws-labo.id]
 
   listeners = {
-    forum-http = {
+    aws-labo-http = {
       port            = 80
       protocol        = "HTTP"
       forward = {
-        target_group_key = "forum"
+        target_group_key = "aws-labo"
       }
     }
   }
 
   target_groups = {
-    forum = {
+    aws-labo = {
       name_prefix      = "h1"
       protocol         = "HTTP"
       port             = 80
@@ -147,7 +167,7 @@ module "alb" {
       }
 
       protocol_version = "HTTP1"
-      target_id        = aws_instance.forum.id
+      target_id        = aws_instance.aws-labo.id
       port             = 80
     }
   }
